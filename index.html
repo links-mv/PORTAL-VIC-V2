@@ -13,75 +13,147 @@
     <link rel="icon" type="image/png" sizes="192x192" href="https://www.vli-logistica.com.br/wp-content/uploads/2023/09/cropped-logotipo-1-1-1.png">
     <link rel="apple-touch-icon" sizes="192x192" href="https://www.vli-logistica.com.br/wp-content/uploads/2023/09/cropped-logotipo-1-1-1.png">
 
+    <link rel="manifest" href="./manifest.json">
+
     <style>
         :root { 
-            --vli-azul: #0085B2; /* Azul mais vivo e alegre */
+            --vli-azul: #0085B2;
             --vli-azul-escuro: #005f83;
-            --vli-laranja: #F37021; /* Laranja vibrante corporativo */
-            --vli-verde: #28a745; 
-            --vli-erro: #dc3545; 
-            --bg: #F4F7F9; /* Fundo mais claro e limpo */
-            --radius: 12px; 
-            --text-color: #2c3e50;
-        }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; color: var(--text-color); }
-        body { background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; position: relative; }
-        
-        /* Marca d'água oculta/discreta */
-        .watermark {
-            position: fixed;
-            bottom: 10px;
-            right: 15px;
-            font-size: 10px;
-            font-weight: 600;
-            color: rgba(0, 0, 0, 0.05);
-            z-index: 1;
-            pointer-events: none;
-            user-select: none;
+            --vli-azul-gradient: linear-gradient(135deg, #005f83 0%, #0085B2 100%);
+            --vli-laranja: #F37021;
+            --vli-verde: #24b34b; 
+            --vli-erro: #e13d4b; 
+            --bg: #F8FAFC; 
+            --radius-lg: 20px;
+            --radius-md: 14px; 
+            --text-main: #1E293B;
+            --text-sub: #64748B;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 10px 25px rgba(0,133,178,0.08);
         }
 
-        .container { width: 100%; max-width: 450px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; box-shadow: 0 4px 25px rgba(0,0,0,0.08); z-index: 2; position: relative; }
+        * { 
+            box-sizing: border-box; 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            color: var(--text-main); 
+        }
+
+        body { 
+            background: #E2E8F0; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
         
-        /* Header com gradiente mais iluminado */
-        .header { background: linear-gradient(135deg, var(--vli-azul) 0%, #009FE3 100%); padding: 40px 20px 45px; text-align: center; color: white; border-radius: 0 0 24px 24px; box-shadow: 0 6px 18px rgba(0,133,178,0.2); }
-        .logo-box { background: white; padding: 12px 15px; border-radius: 12px; display: inline-block; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .logo { width: 100px; display: block; }
-        .header-title { font-weight: 700; letter-spacing: 2px; font-size: 12px; opacity: 0.95; text-transform: uppercase; color: #fff; }
+        .watermark {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.15);
+            z-index: 1;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: var(--bg); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.12); 
+            z-index: 2; 
+            position: relative; 
+        }
         
-        .user-pill { background: #fff; margin: -20px auto 10px; padding: 10px 20px; border-radius: 50px; font-size: 13px; color: var(--vli-azul); font-weight: 700; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; border: 1px solid #e2e8f0; z-index: 10; position: relative; max-width: 80%; }
+        /* Header Premium Estilo AlmoxaVIC */
+        .header { 
+            background: var(--vli-azul-gradient); 
+            padding: 35px 24px 45px; 
+            text-align: center; 
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg); 
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        .logo-box { 
+            background: white; 
+            padding: 10px 16px; 
+            border-radius: var(--radius-md); 
+            display: inline-block; 
+            margin-bottom: 14px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
+        }
+        .logo { width: 85px; display: block; }
+        .header-title { 
+            font-weight: 800; 
+            letter-spacing: 1.5px; 
+            font-size: 14px; 
+            text-transform: uppercase; 
+            color: #fff; 
+            opacity: 0.95;
+        }
         
-        .content { padding: 25px 24px; flex-grow: 1; }
-        .step { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .step.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* User Pill Integrada ao Layout */
+        .user-pill { 
+            background: #fff; 
+            margin: -22px 24px 0; 
+            padding: 12px 20px; 
+            border-radius: var(--radius-md); 
+            font-size: 13px; 
+            text-align: center; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
+            display: none; 
+            border: 1px solid rgba(0,133,178,0.08); 
+            z-index: 10; 
+            position: relative; 
+        }
+        .user-pill b { color: var(--vli-azul); }
         
-        h3 { color: var(--vli-azul); font-weight: 600; margin-bottom: 20px; }
+        .content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
         
-        label { display: block; font-weight: 600; margin: 16px 0 6px 4px; font-size: 12px; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; }
-        input, select, textarea { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: var(--radius); font-size: 15px; background: #f8fafc; outline: none; transition: all 0.2s; color: #334155; }
-        input:focus, select:focus, textarea:focus { border-color: var(--vli-azul); background: #fff; box-shadow: 0 0 0 3px rgba(0,133,178,0.15); }
+        /* Transições de Tela Fluidas */
+        .step { display: none; width: 100%; animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+        .step.active { display: flex; flex-direction: column; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         
-        .btn { width: 100%; padding: 15px; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 15px; transition: all 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        .btn-blue { background: var(--vli-azul); color: white; box-shadow: 0 4px 12px rgba(0,133,178,0.25); }
-        .btn-blue:hover { background: var(--vli-azul-escuro); }
-        .btn-orange { background: var(--vli-laranja); color: white; box-shadow: 0 4px 12px rgba(243,112,33,0.25); }
-        .btn-orange:hover { background: #d9611a; }
-        .btn-back { background: transparent; color: #64748b; font-size: 13px; text-decoration: none; border: 1px solid #e2e8f0; margin-top: 20px; }
-        .btn-back:hover { background: #f1f5f9; }
+        h3 { color: var(--vli-azul-escuro); font-weight: 700; font-size: 20px; margin: 0 0 20px 0; }
         
-        /* Menu com Emojis Coloridos */
-        .menu-card { background: #fff; border: 1px solid #e2e8f0; padding: 18px 20px; border-radius: var(--radius); margin-bottom: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.2s ease; }
-        .menu-card:hover, .menu-card:active { border-color: var(--vli-azul); box-shadow: 0 6px 15px rgba(0,133,178,0.1); transform: translateY(-2px); background: #fcfdfe; }
-        .menu-card span { font-size: 22px; transition: transform 0.3s; }
-        .menu-card:hover span, .menu-card:active span { transform: scale(1.15); }
-        .menu-card b { font-weight: 600; font-size: 15px; color: #1e293b; }
+        /* Inputs e Formulários Clean Modern */
+        label { display: block; font-weight: 700; margin: 16px 0 6px 2px; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; }
+        input, select, textarea { width: 100%; padding: 14px 16px; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); font-size: 15px; background: #fff; outline: none; transition: all 0.25s ease; color: var(--text-main); }
+        input:focus, select:focus, textarea:focus { border-color: var(--vli-azul); box-shadow: 0 0 0 4px rgba(0,133,178,0.12); }
         
-        .cart-item { background: #f8fafc; padding: 14px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); }
-        .info-box { background: #f0f9ff; padding: 20px; border-radius: 12px; border: 1px solid #bae6fd; color: #0369a1; font-size: 14px; line-height: 1.5; }
+        /* Botões AlmoxaVIC Flat-Design */
+        .btn { width: 100%; padding: 16px; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
+        .btn:active { transform: scale(0.97); opacity: 0.9; }
         
-        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .spinner { border: 3px solid #e2e8f0; border-top: 3px solid var(--vli-azul); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; }
+        .btn-blue { background: var(--vli-azul); color: white; box-shadow: 0 4px 12px rgba(0,133,178,0.2); }
+        .btn-orange { background: var(--vli-laranja); color: white; box-shadow: 0 4px 12px rgba(243,112,33,0.2); }
+        
+        .btn-back { background: #fff; color: var(--text-sub); font-size: 12px; border: 1.5px solid #E2E8F0; margin-top: 20px; }
+        .btn-back:hover { background: #F1F5F9; }
+        
+        /* Grid de Menu Estilo App Nativo */
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 10px; }
+        .menu-card { background: #fff; border: 1px solid #E2E8F0; padding: 22px 16px; border-radius: var(--radius-md); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); }
+        .menu-card:active { border-color: var(--vli-azul); box-shadow: var(--shadow-md); transform: translateY(-2px); background: #FAF9FF; }
+        .menu-card span { font-size: 28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+        .menu-card b { font-weight: 700; font-size: 14px; color: var(--text-main); }
+        
+        /* Itens e Listas Dinâmicas */
+        .cart-item { background: #fff; padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px; border: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); box-shadow: var(--shadow-sm); }
+        .info-box { background: #EFF6FF; padding: 18px; border-radius: var(--radius-md); border: 1px solid #BFDBFE; color: #1E40AF; font-size: 14px; line-height: 1.6; }
+        
+        /* Overlay de Loading Sutil */
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .spinner { border: 3px solid #E2E8F0; border-top: 3px solid var(--vli-azul); border-radius: 50%; width: 36px; height: 36px; animation: spin 0.7s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -91,7 +163,7 @@
 
 <div id="loading-overlay">
     <div class="spinner"></div>
-    <p id="loading-text" style="margin-top:15px; font-weight:600; color:var(--vli-azul); letter-spacing: 0.5px;">Processando...</p>
+    <p id="loading-text" style="margin-top:16px; font-weight:700; color:var(--vli-azul); font-size:14px; letter-spacing: 0.5px;">Processando...</p>
 </div>
 
 <div class="container">
@@ -105,24 +177,30 @@
     <div id="user-pill" class="user-pill"></div>
 
     <div class="content">
-        <div id="step-start" class="step active" style="text-align:center; padding-top:40px;">
-            <p style="color: #475569; font-size: 15px; margin-bottom: 25px;">Bem-vindo ao Portal VLI - VIC .</p>
+        <div id="step-start" class="step active" style="text-align:center; padding-top:40px; justify-content: center; align-items: center;">
+            <p style="color: var(--text-sub); font-size: 15px; margin-bottom: 24px; font-weight: 500;">Bem-vindo ao Portal VLI - VIC.</p>
             <button class="btn btn-blue" onclick="initSystem()">Acessar Portal</button>
         </div>
         
         <div id="step-login" class="step">
             <h3 style="text-align: center;">Identificação</h3>
-            <p style="text-align: center; color: #64748b; font-size: 13px; margin-bottom: 25px;">Insira sua matrícula para continuar.</p>
+            <p style="text-align: center; color: var(--text-sub); font-size: 14px; margin: -10px 0 24px 0;">Insira sua matrícula para continuar.</p>
             <label>Matrícula</label>
             <input type="tel" id="input-mat" placeholder="Ex: 12345" maxlength="8">
             <button class="btn btn-blue" onclick="handleLogin()">Entrar no Sistema</button>
         </div>
 
         <div id="step-menu" class="step">
-            <div class="menu-card" onclick="goTo('step-epi')"><span>📦</span> <b>Solicitar EPI</b></div>
-            <div class="menu-card" onclick="goTo('step-desvio')"><span>⚠️</span> <b>Relatar Desvio</b></div>
-            <div class="menu-card" onclick="checkFerias()"><span>📅</span> <b>Minhas Férias 2027</b></div>
-            <button class="btn btn-back" onclick="location.reload()" style="border:none; text-decoration: underline; background: transparent; box-shadow: none;">Sair da Conta</button>
+            <div class="menu-grid">
+                <div class="menu-card" onclick="goTo('step-epi')"><span>📦</span><b>Solicitar EPI</b></div>
+                <div class="menu-card" onclick="goTo('step-desvio')"><span>⚠️</span><b>Relatar Desvio</b></div>
+            </div>
+            <div class="menu-grid" style="margin-top: 14px;">
+                <div class="menu-card" onclick="checkFerias()" style="grid-column: span 2; flex-direction: row; justify-content: center; padding: 18px;">
+                    <span>📅</span><b>Minhas Férias 2027</b>
+                </div>
+            </div>
+            <button class="btn btn-back" onclick="location.reload()" style="border:none; text-decoration: underline; background: transparent; font-weight:700; color:var(--vli-erro);">Sair da Conta</button>
         </div>
 
         <div id="step-epi" class="step">
@@ -132,7 +210,7 @@
             <div id="epi-dinamico"></div>
             <button class="btn btn-orange" onclick="addItem()">+ Adicionar à Lista</button>
             
-            <div id="cart-area" style="display:none; margin-top:25px; border-top:1px solid #e2e8f0; padding-top:20px;">
+            <div id="cart-area" style="display:none; margin-top:25px; border-top:1.5px solid #E2E8F0; padding-top:20px;">
                 <label>Itens Selecionados:</label>
                 <div id="cart-list"></div>
                 <button class="btn btn-blue" onclick="sendEPI()">Finalizar Pedido</button>
@@ -152,7 +230,7 @@
                     <option>Estação</option>
                 </select>
                 
-                <label>Quando ocorreu ?</label>
+                <label>Quando ocorreu?</label>
                 <select id="d-tempo-tipo" onchange="document.getElementById('div-manual').style.display=(this.value==='manual'?'flex':'none')">
                     <option value="agora">Agora</option>
                     <option value="manual">Selecionar Horário</option>
@@ -165,13 +243,12 @@
                 <label>Descrição do Evento</label>
                 <textarea id="d-desc" rows="4" placeholder="Descreva os detalhes do que aconteceu..."></textarea>
                 
-                <button class="btn btn-blue" style="background:var(--vli-erro); box-shadow: 0 4px 10px rgba(220,53,69,0.2);" onclick="sendDesvio()">Registrar Desvio</button>
-                
+                <button class="btn" style="background:var(--vli-erro); color:white; box-shadow: 0 4px 12px rgba(224,61,75,0.25);" onclick="sendDesvio()">Registrar Desvio</button>
                 <button class="btn btn-back" onclick="verMeusDesvios()">🔍 Ver Meu Histórico de Desvios</button>
             </div>
             
-            <div id="desvio-lista" style="display:none; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
-                <p style="font-size:12px; color:#64748b; font-weight: 600; text-transform: uppercase;">Seu Histórico:</p>
+            <div id="desvio-lista" style="display:none; margin-top: 20px; border-top: 1.5px solid #E2E8F0; padding-top: 15px;">
+                <p style="font-size:11px; color:var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Seu Histórico:</p>
                 <div id="container-historico-desvios"></div>
                 <button class="btn btn-back" onclick="document.getElementById('desvio-lista').style.display='none'; document.getElementById('desvio-form').style.display='block';">Voltar ao Formulário</button>
             </div>
@@ -182,9 +259,9 @@
             <h3>Minhas Férias 2027</h3>
             <div id="ferias-view-agendada" style="display:none;">
                 <div class="info-box">
-                    <b style="color: #0c4a6e;">Sugestão já registrada!</b><br><br>
-                    <div id="detalhe-ferias" style="color: #0369a1;"></div>
-                    <p style="margin-top:15px; font-size: 12px; font-weight:600; color:var(--vli-erro)">* Para alterações, contate a supervisão.</p>
+                    <b style="color: #1E40AF; font-size: 15px;">Sugestão já registrada!</b><br><br>
+                    <div id="detalhe-ferias" style="color: #1E3A8A;"></div>
+                    <p style="margin-top:15px; font-size: 12px; font-weight:700; color:var(--vli-erro)">* Para alterações, contate a supervisão.</p>
                 </div>
             </div>
             <div id="ferias-form-sugestao">
@@ -201,11 +278,11 @@
             <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
         </div>
 
-        <div id="step-sucesso" class="step" style="text-align:center; padding-top: 50px;">
-            <div style="font-size:55px;">✅</div>
-            <h2 style="color: var(--vli-verde); margin-top: 15px;">Registro Concluído!</h2>
-            <p style="color:#475569; font-size: 14px;">Seus dados foram processados com sucesso no sistema.</p>
-            <button class="btn btn-blue" style="margin-top: 30px;" onclick="goToMenu()">Retornar ao Menu</button>
+        <div id="step-sucesso" class="step" style="text-align:center; padding-top: 50px; justify-content: center; align-items: center;">
+            <div style="font-size:60px; filter: drop-shadow(0 4px 8px rgba(36,179,75,0.2));">✅</div>
+            <h2 style="color: var(--vli-verde); margin-top: 16px; font-weight: 800;">Registro Concluído!</h2>
+            <p style="color:var(--text-sub); font-size: 14px; max-width: 80%; margin: 0 auto;">Seus dados foram processados com sucesso no sistema.</p>
+            <button class="btn btn-blue" style="margin-top: 32px;" onclick="goToMenu()">Retornar ao Menu</button>
         </div>
     </div>
 </div>
@@ -241,7 +318,6 @@
         } else { alert("Matrícula não localizada na base de dados."); }
     }
 
-    style = document.createElement('style');
     function updateEpiFields() {
         const item = db.epis.find(i => i.nome === document.getElementById('select-epi').value);
         const area = document.getElementById('epi-dinamico');
@@ -278,7 +354,7 @@
         const area = document.getElementById('cart-area');
         area.style.display = cart.length ? 'block' : 'none';
         document.getElementById('cart-list').innerHTML = cart.map((it, i) => `
-            <div class="cart-item"><div><b style="color:var(--vli-azul);">${it.n}</b><br><small style="color:#64748b;">${it.det}</small></div>
+            <div class="cart-item"><div><b style="color:var(--vli-azul);">${it.n}</b><br><small style="color:var(--text-sub);">${it.det}</small></div>
             <button onclick="cart.splice(${i},1);renderCart()" style="border:none;background:none;color:var(--vli-erro);font-size:18px;cursor:pointer;">✕</button></div>`).join('');
     }
 
@@ -295,9 +371,9 @@
                     opcao: it.o1,     
                     opcao2: it.o2,    
                     protocolo: "EPI"+Date.now()
-                })});
+                }) });
             }
-            cart = []; // Limpa o carrinho após processar
+            cart = []; 
             hideLoad(); goTo('step-sucesso');
         } catch (e) { hideLoad(); alert("Erro ao enviar solicitação."); }
     }
@@ -315,8 +391,8 @@
         try {
             await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
                 tipo: "DESVIO", nome: user.nome, matricula: user.mat, local: document.getElementById('d-local').value, descricao: desc, dataFato: dF, horaFato: hF
-            })});
-            document.getElementById('d-desc').value = ""; // Limpa campo de texto
+            }) });
+            document.getElementById('d-desc').value = ""; 
             hideLoad(); goTo('step-sucesso');
         } catch(e) { hideLoad(); alert("Erro ao registrar desvio."); }
     }
@@ -329,9 +405,9 @@
         const meusDesvios = (db.desvios || []).filter(d => String(d.matricula) === String(user.mat));
         if (meusDesvios.length > 0) {
             [...meusDesvios].reverse().forEach(d => {
-                container.innerHTML += `<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:10px; border-left:4px solid var(--vli-erro); font-size:13px; color:#334155; border: 1px solid #e2e8f0; border-left: 4px solid var(--vli-erro);"><b>📅 ${d.dataFato} às ${d.horaFato} - ${d.local}</b><br><span style="color:#64748b; display:inline-block; margin-top:5px;">${d.descricao}</span></div>`;
+                container.innerHTML += `<div style="background:#fff; padding:14px; border-radius:var(--radius-md); margin-bottom:12px; border: 1px solid #E2E8F0; border-left:4px solid var(--vli-erro); font-size:13px; box-shadow: var(--shadow-sm);"><b>📅 ${d.dataFato} às ${d.horaFato} - ${d.local}</b><br><span style="color:var(--text-sub); display:inline-block; margin-top:6px; line-height:1.4;">${d.descricao}</span></div>`;
             });
-        } else { container.innerHTML = "<p style='font-size:13px; color:#94a3b8; text-align:center; padding: 20px 0;'>Nenhum registro encontrado no seu histórico.</p>"; }
+        } else { container.innerHTML = "<p style='font-size:13px; color:var(--text-sub); text-align:center; padding: 20px 0;'>Nenhum registro encontrado no seu histórico.</p>"; }
     }
 
     function checkFerias() {
@@ -358,15 +434,29 @@
         try {
             await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
                 tipo: "FERIAS", nome: user.nome, matricula: user.mat, dias: document.getElementById('f-dias').value, op1: op1, op2: document.getElementById('f-op2').value, op3: document.getElementById('f-op3').value
-            })});
+            }) });
             hideLoad(); goTo('step-sucesso');
         } catch(e) { hideLoad(); alert("Erro ao enviar solicitação."); }
     }
 
     function showLoad(t) { document.getElementById('loading-text').innerText = t; document.getElementById('loading-overlay').style.display = 'flex'; }
     function hideLoad() { document.getElementById('loading-overlay').style.display = 'none'; }
-    function goTo(id) { document.querySelectorAll('.step').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+    
+    function goTo(id) { 
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
+        window.scrollTo(0,0); 
+    }
     function goToMenu() { goTo('step-menu'); }
+
+    // Service Worker Activation para PWA no GitHub
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('PWA carregado com sucesso!', reg))
+                .catch(err => console.error('Erro ao registrar PWA:', err));
+        });
+    }
 </script>
 </body>
 </html>
