@@ -54,7 +54,6 @@
             position: relative; 
         }
         
-        /* Banner de Download PWA Otimizado */
         .pwa-banner {
             display: none;
             background: #ffffff;
@@ -105,7 +104,6 @@
             backdrop-filter: blur(4px);
         }
         
-        /* Aumento de espaçamento interno do conteúdo global */
         .content { 
             padding: 32px 28px; 
             flex-grow: 1; 
@@ -118,7 +116,6 @@
             display: none; 
             width: 100%; 
         }
-        /* Flexbox com gap para espaçamento uniforme entre os elementos */
         .step.active { 
             display: flex; 
             flex-direction: column; 
@@ -126,9 +123,7 @@
             animation: fadeIn 0.4s ease-out;
         }
         
-        #step-start.active {
-            margin-top: 35px;
-        }
+        #step-start.active { margin-top: 35px; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -149,7 +144,6 @@
         }
         input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
         
-        /* Botões com espaçamentos mais robustos */
         .btn { width: 100%; padding: 18px; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
         .btn:active { transform: scale(0.98); opacity: 0.95; }
         
@@ -167,18 +161,7 @@
         .cart-item { background: #fff; padding: 16px; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); box-shadow: var(--shadow-sm); }
         .info-box { background: #fff; padding: 20px; border-radius: var(--radius-md); color: #1E293B; font-size: 14px; line-height: 1.6; }
         
-        /* Assinatura movida para o final do container interno, evitando sobreposição */
-        .watermark {
-            text-align: center;
-            padding: 20px 0 25px;
-            font-size: 10px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.35);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            pointer-events: none;
-            margin-top: auto;
-        }
+        .watermark { text-align: center; padding: 20px 0 25px; font-size: 10px; font-weight: 600; color: rgba(255, 255, 255, 0.35); text-transform: uppercase; letter-spacing: 1px; pointer-events: none; margin-top: auto; }
 
         #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,133,178,0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fff; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.7s linear infinite; }
@@ -195,7 +178,6 @@
 
     <div class="header">
         <div class="logo-box">
-            <!-- A imagem local logo-pwa.png está sendo mantida provisoriamente aqui -->
             <img src="logo-pwa.png" class="logo" alt="Portal VIC">
         </div>
         <div class="header-title">Portal VIC</div>
@@ -227,7 +209,7 @@
                     <span>📅</span><b>Minhas Férias 2027</b>
                 </div>
             </div>
-            <button class="btn btn-back" onclick="location.reload()" style="border:none; text-decoration: underline; font-weight:700; margin-top: 10px;">Sair da Conta</button>
+            <button class="btn btn-back" onclick="fazerLogout()" style="border:none; text-decoration: underline; font-weight:700; margin-top: 10px;">Sair da Conta</button>
         </div>
 
         <div id="step-epi" class="step">
@@ -316,7 +298,6 @@
     </div>
 </div>
 
-<!-- Estrutura de Loading adicionada aqui -->
 <div id="loading-overlay">
     <div class="spinner"></div>
     <div id="loading-text" style="color: #ffffff; margin-top: 16px; font-weight: 600; font-size: 14px;">Carregando...</div>
@@ -329,7 +310,6 @@
     let cart = [];
     let deferredPrompt;
 
-    // Gerenciador de Instalação Híbrido (Nativo + Fallback Manual para Google Apps Script)
     window.addEventListener('DOMContentLoaded', () => {
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         const banner = document.getElementById('install-banner');
@@ -338,20 +318,16 @@
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             
             if (isIos) {
-                // Configuração Manual Dedicada para iOS Safari
                 document.getElementById('install-text').innerHTML = 'Adicione o Portal VIC à tela inicial <span>Toque no botão de Compartilhar <b style="font-size:15px; color:var(--vli-laranja);">⎋</b> do Safari e escolha "Adicionar à Tela de Início"</span>';
                 document.getElementById('install-button').style.display = 'none';
                 banner.style.display = 'block';
             } else {
-                // Captura evento nativo do Android/Chrome
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
                     deferredPrompt = e;
                     banner.style.display = 'block';
                 });
 
-                // FALLBACK: Se o script rodar dentro de um IFRAME do Google, o evento acima é bloqueado.
-                // Forçamos a aparição do guia prático após 2 segundos caso o prompt nativo seja omitido.
                 setTimeout(() => {
                     if (!deferredPrompt && banner.style.display !== 'block') {
                         document.getElementById('install-text').innerHTML = 'Instale o Portal VIC no seu Android <span>Toque nos 3 pontinhos <b style="font-size:16px; color:var(--vli-laranja);">⋮</b> do navegador e selecione "Instalar aplicativo" ou "Adicionar à tela inicial"</span>';
@@ -386,8 +362,35 @@
             const sel = document.getElementById('select-epi');
             sel.innerHTML = '<option value="">Selecione o EPI...</option>';
             db.epis.forEach(e => sel.innerHTML += `<option value="${e.nome}">${e.nome}</option>`);
-            hideLoad(); goTo('step-login');
+            
+            // Verifica se o usuário já tem um login salvo no localStorage
+            const savedMat = localStorage.getItem('vic_user_mat');
+            const savedNome = localStorage.getItem('vic_user_nome');
+            
+            if (savedMat && savedNome) {
+                user = { mat: savedMat, nome: savedNome };
+                exibirSaudacao();
+                hideLoad();
+                goTo('step-menu');
+            } else {
+                hideLoad(); 
+                goTo('step-login');
+            }
         } catch (e) { alert("Erro de conexão com o servidor corporativo."); hideLoad(); }
+    }
+    
+    // Função separada para lidar com a saudação de forma limpa
+    function exibirSaudacao() {
+        const hr = new Date().getHours();
+        let saudacao = "Boa noite";
+        if (hr >= 5 && hr < 12) saudacao = "Bom dia";
+        else if (hr >= 12 && hr < 18) saudacao = "Boa tarde";
+        
+        // Separa o nome completo pelos espaços e pega apenas a primeira parte
+        const primeiroNome = user.nome.split(' ')[0];
+        
+        document.getElementById('user-pill').innerHTML = `👤 ${saudacao}, <b>${primeiroNome}</b>`;
+        document.getElementById('user-pill').style.display = "block";
     }
 
     function handleLogin() {
@@ -396,15 +399,20 @@
         if (func) {
             user = { mat: m, nome: func };
             
-            const hr = new Date().getHours();
-            let saudacao = "Boa noite";
-            if (hr >= 5 && hr < 12) saudacao = "Bom dia";
-            else if (hr >= 12 && hr < 18) saudacao = "Boa tarde";
+            // Salva as credenciais no armazenamento do navegador
+            localStorage.setItem('vic_user_mat', user.mat);
+            localStorage.setItem('vic_user_nome', user.nome);
             
-            document.getElementById('user-pill').innerHTML = `👤 ${saudacao}, <b>${user.nome}</b>`;
-            document.getElementById('user-pill').style.display = "block";
+            exibirSaudacao();
             goTo('step-menu');
         } else { alert("Matrícula não localizada na base de dados."); }
+    }
+    
+    // Função para limpar o acesso do usuário
+    function fazerLogout() {
+        localStorage.removeItem('vic_user_mat');
+        localStorage.removeItem('vic_user_nome');
+        location.reload();
     }
 
     function updateEpiFields() {
