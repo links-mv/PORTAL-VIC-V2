@@ -356,9 +356,23 @@
         showLoad("Sincronizando Dados...");
         try {
             const r = await fetch(URL_API);
-            const json = await r.json();
-            db = json.dados;
-            if (!db.desvios) db.desvios = []; 
+            const text = await r.text(); // Puxa como texto primeiro para evitar quebra se não for JSON
+            
+            let json;
+            try {
+                json = JSON.parse(text);
+            } catch (parseError) {
+                console.error("Erro ao converter resposta da API:", text);
+                throw new Error("A API não retornou um formato JSON válido.");
+            }
+
+            // Garante que o banco de dados seja criado corretamente, mesmo se a planilha estiver vazia
+            db = json.dados || {};
+            if (!db.epis) db.epis = [];
+            if (!db.funcionarios) db.funcionarios = {};
+            if (!db.desvios) db.desvios = [];
+            if (!db.ferias) db.ferias = {};
+
             const sel = document.getElementById('select-epi');
             sel.innerHTML = '<option value="">Selecione o EPI...</option>';
             db.epis.forEach(e => sel.innerHTML += `<option value="${e.nome}">${e.nome}</option>`);
@@ -376,7 +390,11 @@
                 hideLoad(); 
                 goTo('step-login');
             }
-        } catch (e) { alert("Erro de conexão com o servidor corporativo."); hideLoad(); }
+        } catch (e) { 
+            console.error(e);
+            hideLoad(); 
+            alert("Erro de conexão com o servidor. Verifique se o link do Google Apps Script está correto e publicado."); 
+        }
     }
     
     // Função separada para lidar com a saudação de forma limpa
