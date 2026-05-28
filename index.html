@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Logo Atualizada -->
     <link rel="icon" type="image/png" sizes="192x192" href="logo-pwa.png">
     <link rel="apple-touch-icon" sizes="192x192" href="logo-pwa.png">
     <link rel="manifest" href="./manifest.json">
@@ -32,7 +31,7 @@
             box-sizing: border-box; 
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             -webkit-tap-highlight-color: transparent; 
-            color: #FFFFFF; /* Texto padrão branco para o fundo azul */
+            color: #FFFFFF; 
         }
 
         body { 
@@ -57,7 +56,6 @@
             letter-spacing: 1px;
         }
 
-        /* Fundo do portal agora usa a cor principal Azul VLI */
         .container { 
             width: 100%; 
             max-width: 450px; 
@@ -70,18 +68,31 @@
             position: relative; 
         }
         
+        /* Banner de Sugestão de Download PWA */
+        .pwa-banner {
+            display: none;
+            background: #ffffff;
+            padding: 12px 16px;
+            margin: 12px 16px 0 16px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.4s ease;
+        }
+        .pwa-banner p { color: #1E293B; margin: 0 0 8px 0; font-size: 13px; font-weight: 600; text-align: center; }
+        .pwa-banner button { width: 100%; padding: 8px; border: none; background: var(--vli-laranja); color: white; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; }
+
         .header { 
-            padding: 35px 24px 45px; 
+            padding: 40px 24px 20px; 
             text-align: center; 
             position: relative;
         }
         
         .logo-box { 
             background: white; 
-            padding: 10px 16px; 
+            padding: 12px 18px; 
             border-radius: var(--radius-md); 
             display: inline-block; 
-            margin-bottom: 14px; 
+            margin-bottom: 16px; 
             box-shadow: var(--shadow-sm); 
         }
         
@@ -90,15 +101,14 @@
         .header-title { 
             font-weight: 800; 
             letter-spacing: 1.5px; 
-            font-size: 14px; 
+            font-size: 16px; 
             text-transform: uppercase; 
             opacity: 0.95;
         }
         
-        /* User Pill Transparente e Adaptada */
         .user-pill { 
             background: rgba(255, 255, 255, 0.1); 
-            margin: -22px 24px 0; 
+            margin: 10px 24px 0; 
             padding: 12px 20px; 
             border-radius: var(--radius-md); 
             font-size: 13px; 
@@ -110,17 +120,31 @@
             backdrop-filter: blur(4px);
         }
         
-        .content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+        .content { 
+            padding: 24px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+        }
         
-        .step { display: none; width: 100%; animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
-        .step.active { display: flex; flex-direction: column; }
+        /* Ajuste de fluxo e espaçamento corrigido */
+        .step { 
+            display: none; 
+            width: 100%; 
+            animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .step.active { 
+            display: flex; 
+            flex-direction: column; 
+            margin-top: auto; 
+            margin-bottom: auto; /* Centraliza o bloco inteiro sem esticar os espaços internos */
+        }
         @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         
         h3 { font-weight: 700; font-size: 20px; margin: 0 0 20px 0; text-align: center; }
         
         label { display: block; font-weight: 700; margin: 16px 0 6px 2px; font-size: 11px; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.8px; }
         
-        /* Inputs brancos com texto escuro */
         input, select, textarea { 
             width: 100%; 
             padding: 14px 16px; 
@@ -134,8 +158,8 @@
         }
         input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
         
-        /* Botões Padrão Laranja */
-        .btn { width: 100%; padding: 16px; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
+        /* Botões Laranja Padrão VIC */
+        .btn { width: 100%; padding: 16px; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 24px; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
         .btn:active { transform: scale(0.97); opacity: 0.9; }
         
         .btn-orange { background: var(--vli-laranja); color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
@@ -143,18 +167,15 @@
         .btn-back { background: transparent; color: white; font-size: 12px; border: 1.5px solid rgba(255,255,255,0.3); margin-top: 20px; }
         .btn-back:hover { background: rgba(255,255,255,0.1); }
         
-        /* Menu Cards Brancos com texto escuro */
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 10px; }
         .menu-card { background: #fff; border: none; padding: 22px 16px; border-radius: var(--radius-md); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); }
         .menu-card:active { box-shadow: var(--shadow-md); transform: translateY(-2px); background: #f8fafc; }
         .menu-card span { font-size: 28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
         .menu-card b { font-weight: 700; font-size: 14px; color: #1E293B; }
         
-        /* Itens brancos */
         .cart-item { background: #fff; padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); box-shadow: var(--shadow-sm); }
         .info-box { background: #fff; padding: 18px; border-radius: var(--radius-md); color: #1E293B; font-size: 14px; line-height: 1.6; }
         
-        /* Overlay Escuro para o fundo azul */
         #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,133,178,0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fff; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.7s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -170,9 +191,15 @@
 </div>
 
 <div class="container">
+    <!-- Banner de Instalação PWA Ativo -->
+    <div id="install-banner" class="pwa-banner">
+        <p>Instale o Portal VIC na sua tela inicial</p>
+        <button onclick="triggerPwaInstall()">Baixar Aplicativo</button>
+    </div>
+
     <div class="header">
         <div class="logo-box">
-            <img src="logo-pwa.png" class="logo" alt="Logotipo Portal">
+            <img src="logo-pwa.png" class="logo" alt="Portal VIC">
         </div>
         <div class="header-title">Portal VIC</div>
     </div>
@@ -180,9 +207,9 @@
     <div id="user-pill" class="user-pill"></div>
 
     <div class="content">
-        <!-- STEP: START -->
-        <div id="step-start" class="step active" style="text-align:center; padding-top:40px; justify-content: center; align-items: center;">
-            <p style="color: rgba(255,255,255,0.9); font-size: 15px; margin-bottom: 24px; font-weight: 500;">Bem-vindo ao Portal VLI - VIC.</p>
+        <!-- STEP: START (Espaçamentos Ajustados) -->
+        <div id="step-start" class="step active" style="text-align:center;">
+            <p style="color: rgba(255,255,255,0.95); font-size: 15px; margin: 10px 0 10px 0; font-weight: 500; letter-spacing: 0.2px;">Bem-vindo ao Portal VLI - VIC.</p>
             <button class="btn btn-orange" onclick="initSystem()">Acessar Portal</button>
         </div>
         
@@ -302,6 +329,27 @@
     let db = { funcionarios: {}, epis: [], ferias: {}, desvios: [] };
     let user = { mat: "", nome: "" };
     let cart = [];
+    let deferredPrompt;
+
+    // Captura a elegibilidade do PWA para forçar o aviso de instalação
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').style.display = 'block';
+    });
+
+    function triggerPwaInstall() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação.');
+                }
+                document.getElementById('install-banner').style.display = 'none';
+                deferredPrompt = null;
+            });
+        }
+    }
 
     async function initSystem() {
         showLoad("Sincronizando Dados...");
@@ -323,7 +371,6 @@
         if (func) {
             user = { mat: m, nome: func };
             
-            // Saudação dinâmica com base no horário
             const hr = new Date().getHours();
             let saudacao = "Boa noite";
             if (hr >= 5 && hr < 12) saudacao = "Bom dia";
@@ -355,13 +402,10 @@
     function addItem() {
         const sel = document.getElementById('select-epi');
         if(!sel.value) return;
-        
         const val1 = document.getElementById('o1') ? document.getElementById('o1').value : "";
         const val2 = document.getElementById('o2') ? document.getElementById('o2').value : "";
         const detStr = `${val1} ${val2}`.trim();
-        
         cart.push({ n: sel.value, det: detStr, o1: val1, o2: val2 });
-        
         sel.value = ""; 
         document.getElementById('epi-dinamico').innerHTML = "";
         renderCart();
@@ -467,8 +511,8 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('PWA carregado com sucesso!', reg))
-                .catch(err => console.error('Erro ao registrar PWA:', err));
+                .then(reg => console.log('PWA ativo.', reg))
+                .catch(err => console.error('Erro PWA:', err));
         });
     }
 </script>
