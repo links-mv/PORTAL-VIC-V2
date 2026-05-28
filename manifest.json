@@ -3,19 +3,19 @@
   "name": "Portal VIC - Gerenciamento VLI",
   "icons": [
     {
-      "src": "link-da-sua-logo-192.png",
+      "src": "logo-pwa.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "link-da-sua-logo-512.png",
+      "src": "logo-pwa.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": "./index.html",
   "background_color": "#F4F7F9",
-  "theme-color": "#0085B2",
+  "theme_color": "#0085B2",
   "display": "standalone",
   "orientation": "portrait"
 }
