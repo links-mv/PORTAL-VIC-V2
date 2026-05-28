@@ -10,37 +10,33 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     
-    <link rel="icon" type="image/png" sizes="192x192" href="https://www.vli-logistica.com.br/wp-content/uploads/2023/09/cropped-logotipo-1-1-1.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="https://www.vli-logistica.com.br/wp-content/uploads/2023/09/cropped-logotipo-1-1-1.png">
-
+    <!-- Logo Atualizada -->
+    <link rel="icon" type="image/png" sizes="192x192" href="logo-pwa.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="logo-pwa.png">
     <link rel="manifest" href="./manifest.json">
 
     <style>
         :root { 
             --vli-azul: #0085B2;
             --vli-azul-escuro: #005f83;
-            --vli-azul-gradient: linear-gradient(135deg, #005f83 0%, #0085B2 100%);
             --vli-laranja: #F37021;
             --vli-verde: #24b34b; 
             --vli-erro: #e13d4b; 
-            --bg: #F8FAFC; 
             --radius-lg: 20px;
             --radius-md: 14px; 
-            --text-main: #1E293B;
-            --text-sub: #64748B;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-            --shadow-md: 0 10px 25px rgba(0,133,178,0.08);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.15);
         }
 
         * { 
             box-sizing: border-box; 
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             -webkit-tap-highlight-color: transparent; 
-            color: var(--text-main); 
+            color: #FFFFFF; /* Texto padrão branco para o fundo azul */
         }
 
         body { 
-            background: #E2E8F0; 
+            background: var(--vli-azul-escuro); 
             margin: 0; 
             display: flex; 
             justify-content: center; 
@@ -54,106 +50,113 @@
             transform: translateX(-50%);
             font-size: 10px;
             font-weight: 600;
-            color: rgba(0, 0, 0, 0.15);
+            color: rgba(255, 255, 255, 0.3);
             z-index: 1;
             pointer-events: none;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
+        /* Fundo do portal agora usa a cor principal Azul VLI */
         .container { 
             width: 100%; 
             max-width: 450px; 
-            background: var(--bg); 
+            background: var(--vli-azul); 
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            box-shadow: 0 0 40px rgba(0,0,0,0.12); 
+            box-shadow: 0 0 40px rgba(0,0,0,0.3); 
             z-index: 2; 
             position: relative; 
         }
         
-        /* Header Premium Estilo AlmoxaVIC */
         .header { 
-            background: var(--vli-azul-gradient); 
             padding: 35px 24px 45px; 
             text-align: center; 
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg); 
-            box-shadow: var(--shadow-md);
             position: relative;
         }
+        
         .logo-box { 
             background: white; 
             padding: 10px 16px; 
             border-radius: var(--radius-md); 
             display: inline-block; 
             margin-bottom: 14px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
+            box-shadow: var(--shadow-sm); 
         }
+        
         .logo { width: 85px; display: block; }
+        
         .header-title { 
             font-weight: 800; 
             letter-spacing: 1.5px; 
             font-size: 14px; 
             text-transform: uppercase; 
-            color: #fff; 
             opacity: 0.95;
         }
         
-        /* User Pill Integrada ao Layout */
+        /* User Pill Transparente e Adaptada */
         .user-pill { 
-            background: #fff; 
+            background: rgba(255, 255, 255, 0.1); 
             margin: -22px 24px 0; 
             padding: 12px 20px; 
             border-radius: var(--radius-md); 
             font-size: 13px; 
             text-align: center; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
             display: none; 
-            border: 1px solid rgba(0,133,178,0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
             z-index: 10; 
             position: relative; 
+            backdrop-filter: blur(4px);
         }
-        .user-pill b { color: var(--vli-azul); }
         
         .content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
         
-        /* Transições de Tela Fluidas */
         .step { display: none; width: 100%; animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
         .step.active { display: flex; flex-direction: column; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         
-        h3 { color: var(--vli-azul-escuro); font-weight: 700; font-size: 20px; margin: 0 0 20px 0; }
+        h3 { font-weight: 700; font-size: 20px; margin: 0 0 20px 0; text-align: center; }
         
-        /* Inputs e Formulários Clean Modern */
-        label { display: block; font-weight: 700; margin: 16px 0 6px 2px; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; }
-        input, select, textarea { width: 100%; padding: 14px 16px; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); font-size: 15px; background: #fff; outline: none; transition: all 0.25s ease; color: var(--text-main); }
-        input:focus, select:focus, textarea:focus { border-color: var(--vli-azul); box-shadow: 0 0 0 4px rgba(0,133,178,0.12); }
+        label { display: block; font-weight: 700; margin: 16px 0 6px 2px; font-size: 11px; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.8px; }
         
-        /* Botões AlmoxaVIC Flat-Design */
+        /* Inputs brancos com texto escuro */
+        input, select, textarea { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: none; 
+            border-radius: var(--radius-md); 
+            font-size: 15px; 
+            background: #fff; 
+            color: #1E293B; 
+            outline: none; 
+            transition: all 0.25s ease; 
+        }
+        input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
+        
+        /* Botões Padrão Laranja */
         .btn { width: 100%; padding: 16px; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
         .btn:active { transform: scale(0.97); opacity: 0.9; }
         
-        .btn-blue { background: var(--vli-azul); color: white; box-shadow: 0 4px 12px rgba(0,133,178,0.2); }
-        .btn-orange { background: var(--vli-laranja); color: white; box-shadow: 0 4px 12px rgba(243,112,33,0.2); }
+        .btn-orange { background: var(--vli-laranja); color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         
-        .btn-back { background: #fff; color: var(--text-sub); font-size: 12px; border: 1.5px solid #E2E8F0; margin-top: 20px; }
-        .btn-back:hover { background: #F1F5F9; }
+        .btn-back { background: transparent; color: white; font-size: 12px; border: 1.5px solid rgba(255,255,255,0.3); margin-top: 20px; }
+        .btn-back:hover { background: rgba(255,255,255,0.1); }
         
-        /* Grid de Menu Estilo App Nativo */
+        /* Menu Cards Brancos com texto escuro */
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 10px; }
-        .menu-card { background: #fff; border: 1px solid #E2E8F0; padding: 22px 16px; border-radius: var(--radius-md); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); }
-        .menu-card:active { border-color: var(--vli-azul); box-shadow: var(--shadow-md); transform: translateY(-2px); background: #FAF9FF; }
+        .menu-card { background: #fff; border: none; padding: 22px 16px; border-radius: var(--radius-md); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--shadow-sm); }
+        .menu-card:active { box-shadow: var(--shadow-md); transform: translateY(-2px); background: #f8fafc; }
         .menu-card span { font-size: 28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
-        .menu-card b { font-weight: 700; font-size: 14px; color: var(--text-main); }
+        .menu-card b { font-weight: 700; font-size: 14px; color: #1E293B; }
         
-        /* Itens e Listas Dinâmicas */
-        .cart-item { background: #fff; padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px; border: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); box-shadow: var(--shadow-sm); }
-        .info-box { background: #EFF6FF; padding: 18px; border-radius: var(--radius-md); border: 1px solid #BFDBFE; color: #1E40AF; font-size: 14px; line-height: 1.6; }
+        /* Itens brancos */
+        .cart-item { background: #fff; padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); box-shadow: var(--shadow-sm); }
+        .info-box { background: #fff; padding: 18px; border-radius: var(--radius-md); color: #1E293B; font-size: 14px; line-height: 1.6; }
         
-        /* Overlay de Loading Sutil */
-        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        .spinner { border: 3px solid #E2E8F0; border-top: 3px solid var(--vli-azul); border-radius: 50%; width: 36px; height: 36px; animation: spin 0.7s linear infinite; }
+        /* Overlay Escuro para o fundo azul */
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,133,178,0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fff; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.7s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -163,13 +166,13 @@
 
 <div id="loading-overlay">
     <div class="spinner"></div>
-    <p id="loading-text" style="margin-top:16px; font-weight:700; color:var(--vli-azul); font-size:14px; letter-spacing: 0.5px;">Processando...</p>
+    <p id="loading-text" style="margin-top:16px; font-weight:700; color:#fff; font-size:14px; letter-spacing: 0.5px;">Processando...</p>
 </div>
 
 <div class="container">
     <div class="header">
         <div class="logo-box">
-            <img src="https://www.vli-logistica.com.br/wp-content/uploads/2023/09/cropped-logotipo-1-1-1.png" class="logo" alt="Logotipo VLI">
+            <img src="logo-pwa.png" class="logo" alt="Logotipo Portal">
         </div>
         <div class="header-title">Portal VIC</div>
     </div>
@@ -177,19 +180,22 @@
     <div id="user-pill" class="user-pill"></div>
 
     <div class="content">
+        <!-- STEP: START -->
         <div id="step-start" class="step active" style="text-align:center; padding-top:40px; justify-content: center; align-items: center;">
-            <p style="color: var(--text-sub); font-size: 15px; margin-bottom: 24px; font-weight: 500;">Bem-vindo ao Portal VLI - VIC.</p>
-            <button class="btn btn-blue" onclick="initSystem()">Acessar Portal</button>
+            <p style="color: rgba(255,255,255,0.9); font-size: 15px; margin-bottom: 24px; font-weight: 500;">Bem-vindo ao Portal VLI - VIC.</p>
+            <button class="btn btn-orange" onclick="initSystem()">Acessar Portal</button>
         </div>
         
+        <!-- STEP: LOGIN -->
         <div id="step-login" class="step">
-            <h3 style="text-align: center;">Identificação</h3>
-            <p style="text-align: center; color: var(--text-sub); font-size: 14px; margin: -10px 0 24px 0;">Insira sua matrícula para continuar.</p>
+            <h3>Identificação</h3>
+            <p style="text-align: center; color: rgba(255,255,255,0.8); font-size: 14px; margin: -10px 0 24px 0;">Insira sua matrícula para continuar.</p>
             <label>Matrícula</label>
             <input type="tel" id="input-mat" placeholder="Ex: 12345" maxlength="8">
-            <button class="btn btn-blue" onclick="handleLogin()">Entrar no Sistema</button>
+            <button class="btn btn-orange" onclick="handleLogin()">Entrar no Sistema</button>
         </div>
 
+        <!-- STEP: MENU -->
         <div id="step-menu" class="step">
             <div class="menu-grid">
                 <div class="menu-card" onclick="goTo('step-epi')"><span>📦</span><b>Solicitar EPI</b></div>
@@ -200,24 +206,26 @@
                     <span>📅</span><b>Minhas Férias 2027</b>
                 </div>
             </div>
-            <button class="btn btn-back" onclick="location.reload()" style="border:none; text-decoration: underline; background: transparent; font-weight:700; color:var(--vli-erro);">Sair da Conta</button>
+            <button class="btn btn-back" onclick="location.reload()" style="border:none; text-decoration: underline; font-weight:700;">Sair da Conta</button>
         </div>
 
+        <!-- STEP: EPI -->
         <div id="step-epi" class="step">
             <h3>Solicitação de EPI</h3>
             <label>Selecione o Item</label>
             <select id="select-epi" onchange="updateEpiFields()"></select>
             <div id="epi-dinamico"></div>
-            <button class="btn btn-orange" onclick="addItem()">+ Adicionar à Lista</button>
+            <button class="btn btn-orange" style="background: white; color: var(--vli-laranja);" onclick="addItem()">+ Adicionar à Lista</button>
             
-            <div id="cart-area" style="display:none; margin-top:25px; border-top:1.5px solid #E2E8F0; padding-top:20px;">
+            <div id="cart-area" style="display:none; margin-top:25px; border-top:1.5px solid rgba(255,255,255,0.2); padding-top:20px;">
                 <label>Itens Selecionados:</label>
                 <div id="cart-list"></div>
-                <button class="btn btn-blue" onclick="sendEPI()">Finalizar Pedido</button>
+                <button class="btn btn-orange" onclick="sendEPI()">Finalizar Pedido</button>
             </div>
             <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
         </div>
 
+        <!-- STEP: DESVIO -->
         <div id="step-desvio" class="step">
             <h3>Relatar Desvio</h3>
             <div id="desvio-form">
@@ -243,24 +251,25 @@
                 <label>Descrição do Evento</label>
                 <textarea id="d-desc" rows="4" placeholder="Descreva os detalhes do que aconteceu..."></textarea>
                 
-                <button class="btn" style="background:var(--vli-erro); color:white; box-shadow: 0 4px 12px rgba(224,61,75,0.25);" onclick="sendDesvio()">Registrar Desvio</button>
-                <button class="btn btn-back" onclick="verMeusDesvios()">🔍 Ver Meu Histórico de Desvios</button>
+                <button class="btn btn-orange" onclick="sendDesvio()">Registrar Desvio</button>
+                <button class="btn btn-back" onclick="verMeusDesvios()">🔍 Ver Meu Histórico</button>
             </div>
             
-            <div id="desvio-lista" style="display:none; margin-top: 20px; border-top: 1.5px solid #E2E8F0; padding-top: 15px;">
-                <p style="font-size:11px; color:var(--text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Seu Histórico:</p>
+            <div id="desvio-lista" style="display:none; margin-top: 20px; border-top: 1.5px solid rgba(255,255,255,0.2); padding-top: 15px;">
+                <p style="font-size:11px; color:rgba(255,255,255,0.8); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Seu Histórico:</p>
                 <div id="container-historico-desvios"></div>
                 <button class="btn btn-back" onclick="document.getElementById('desvio-lista').style.display='none'; document.getElementById('desvio-form').style.display='block';">Voltar ao Formulário</button>
             </div>
             <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
         </div>
 
+        <!-- STEP: FERIAS -->
         <div id="step-ferias" class="step">
             <h3>Minhas Férias 2027</h3>
             <div id="ferias-view-agendada" style="display:none;">
                 <div class="info-box">
-                    <b style="color: #1E40AF; font-size: 15px;">Sugestão já registrada!</b><br><br>
-                    <div id="detalhe-ferias" style="color: #1E3A8A;"></div>
+                    <b style="color: var(--vli-azul); font-size: 15px;">Sugestão já registrada!</b><br><br>
+                    <div id="detalhe-ferias" style="color: #1E293B;"></div>
                     <p style="margin-top:15px; font-size: 12px; font-weight:700; color:var(--vli-erro)">* Para alterações, contate a supervisão.</p>
                 </div>
             </div>
@@ -273,16 +282,17 @@
                 <label>1ª Opção (Mês/Ano)</label><input type="month" id="f-op1">
                 <label>2ª Opção (Mês/Ano)</label><input type="month" id="f-op2">
                 <label>3ª Opção (Mês/Ano)</label><input type="month" id="f-op3">
-                <button class="btn btn-blue" onclick="sendFerias()">Enviar Sugestão</button>
+                <button class="btn btn-orange" onclick="sendFerias()">Enviar Sugestão</button>
             </div>
             <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
         </div>
 
+        <!-- STEP: SUCESSO -->
         <div id="step-sucesso" class="step" style="text-align:center; padding-top: 50px; justify-content: center; align-items: center;">
-            <div style="font-size:60px; filter: drop-shadow(0 4px 8px rgba(36,179,75,0.2));">✅</div>
-            <h2 style="color: var(--vli-verde); margin-top: 16px; font-weight: 800;">Registro Concluído!</h2>
-            <p style="color:var(--text-sub); font-size: 14px; max-width: 80%; margin: 0 auto;">Seus dados foram processados com sucesso no sistema.</p>
-            <button class="btn btn-blue" style="margin-top: 32px;" onclick="goToMenu()">Retornar ao Menu</button>
+            <div style="font-size:60px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">✅</div>
+            <h2 style="color: #fff; margin-top: 16px; font-weight: 800;">Registro Concluído!</h2>
+            <p style="color:rgba(255,255,255,0.8); font-size: 14px; max-width: 80%; margin: 0 auto;">Seus dados foram processados com sucesso no sistema.</p>
+            <button class="btn btn-orange" style="margin-top: 32px;" onclick="goToMenu()">Retornar ao Menu</button>
         </div>
     </div>
 </div>
@@ -312,7 +322,14 @@
         const func = db.funcionarios[m] || db.funcionarios[parseInt(m)];
         if (func) {
             user = { mat: m, nome: func };
-            document.getElementById('user-pill').innerHTML = `👤 Usuário: <b>${user.nome}</b>`;
+            
+            // Saudação dinâmica com base no horário
+            const hr = new Date().getHours();
+            let saudacao = "Boa noite";
+            if (hr >= 5 && hr < 12) saudacao = "Bom dia";
+            else if (hr >= 12 && hr < 18) saudacao = "Boa tarde";
+            
+            document.getElementById('user-pill').innerHTML = `👤 ${saudacao}, <b>${user.nome}</b>`;
             document.getElementById('user-pill').style.display = "block";
             goTo('step-menu');
         } else { alert("Matrícula não localizada na base de dados."); }
@@ -354,8 +371,10 @@
         const area = document.getElementById('cart-area');
         area.style.display = cart.length ? 'block' : 'none';
         document.getElementById('cart-list').innerHTML = cart.map((it, i) => `
-            <div class="cart-item"><div><b style="color:var(--vli-azul);">${it.n}</b><br><small style="color:var(--text-sub);">${it.det}</small></div>
-            <button onclick="cart.splice(${i},1);renderCart()" style="border:none;background:none;color:var(--vli-erro);font-size:18px;cursor:pointer;">✕</button></div>`).join('');
+            <div class="cart-item">
+                <div><b style="color:var(--vli-azul); font-size:15px;">${it.n}</b><br><small style="color:#64748B;">${it.det}</small></div>
+                <button onclick="cart.splice(${i},1);renderCart()" style="border:none;background:none;color:var(--vli-erro);font-size:18px;cursor:pointer;">✕</button>
+            </div>`).join('');
     }
 
     async function sendEPI() {
@@ -363,14 +382,7 @@
         try {
             for (const it of cart) {
                 await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
-                    tipo: "EPI", 
-                    funcionario: user.nome, 
-                    matricula: user.mat, 
-                    epi: it.n, 
-                    detalhes: it.det, 
-                    opcao: it.o1,     
-                    opcao2: it.o2,    
-                    protocolo: "EPI"+Date.now()
+                    tipo: "EPI", funcionario: user.nome, matricula: user.mat, epi: it.n, detalhes: it.det, opcao: it.o1, opcao2: it.o2, protocolo: "EPI"+Date.now()
                 }) });
             }
             cart = []; 
@@ -405,9 +417,12 @@
         const meusDesvios = (db.desvios || []).filter(d => String(d.matricula) === String(user.mat));
         if (meusDesvios.length > 0) {
             [...meusDesvios].reverse().forEach(d => {
-                container.innerHTML += `<div style="background:#fff; padding:14px; border-radius:var(--radius-md); margin-bottom:12px; border: 1px solid #E2E8F0; border-left:4px solid var(--vli-erro); font-size:13px; box-shadow: var(--shadow-sm);"><b>📅 ${d.dataFato} às ${d.horaFato} - ${d.local}</b><br><span style="color:var(--text-sub); display:inline-block; margin-top:6px; line-height:1.4;">${d.descricao}</span></div>`;
+                container.innerHTML += `<div style="background:#fff; padding:14px; border-radius:var(--radius-md); margin-bottom:12px; font-size:13px; box-shadow: var(--shadow-sm);">
+                    <b style="color:#1E293B;">📅 ${d.dataFato} às ${d.horaFato} - ${d.local}</b><br>
+                    <span style="color:#64748B; display:inline-block; margin-top:6px; line-height:1.4;">${d.descricao}</span>
+                </div>`;
             });
-        } else { container.innerHTML = "<p style='font-size:13px; color:var(--text-sub); text-align:center; padding: 20px 0;'>Nenhum registro encontrado no seu histórico.</p>"; }
+        } else { container.innerHTML = "<p style='font-size:13px; color:rgba(255,255,255,0.8); text-align:center; padding: 20px 0;'>Nenhum registro encontrado no seu histórico.</p>"; }
     }
 
     function checkFerias() {
@@ -449,7 +464,6 @@
     }
     function goToMenu() { goTo('step-menu'); }
 
-    // Service Worker Activation para PWA no GitHub
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
