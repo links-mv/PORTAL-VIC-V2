@@ -2,97 +2,127 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Portal VIC</title>
-    <link rel="icon" type="image/png" href="logo-pwa.png">
     <style>
         :root { --vli-azul: #0085B2; --vli-laranja: #F37021; }
-        body { font-family: sans-serif; background: #005f83; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { width: 90%; max-width: 400px; background: var(--vli-azul); padding: 30px; border-radius: 20px; color: white; text-align: center; }
-        .logo { width: 80px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px; }
+        
+        /* CSS para garantir que o site se adapte ao girar a tela */
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            background: #005f83; 
+            font-family: sans-serif; 
+            color: white; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+        }
+        
         .step { display: none; }
         .step.active { display: block; }
-        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: none; font-size: 16px; }
-        button { background: var(--vli-laranja); color: white; font-weight: bold; cursor: pointer; }
-        #loading { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); color:white; justify-content:center; align-items:center; }
+        
+        button { width: 100%; padding: 18px; border-radius: 12px; border: none; background: var(--vli-laranja); color: white; font-size: 16px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        input { width: 100%; padding: 18px; border-radius: 12px; border: none; font-size: 16px; margin-top: 10px; }
+        
+        /* Overlay de carregamento (O erro que você encontrou estava aqui) */
+        #loading-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.7); color: white; justify-content: center; align-items: center; flex-direction: column; z-index: 999;
+        }
     </style>
 </head>
 <body>
 
-<div id="loading">Carregando...</div>
+<div id="loading-overlay">
+    <div id="loading-text">Carregando...</div>
+</div>
 
 <div class="container">
-    <img src="logo-pwa.png" class="logo">
-    
-    <div id="step-start" class="step active">
+    <div id="step1" class="step active">
         <h2>Portal VIC</h2>
-        <button onclick="iniciarSistema()">Acessar Portal</button>
+        <button onclick="carregarSistema()">ACESSAR PORTAL</button>
     </div>
 
-    <div id="step-login" class="step">
-        <h3>Login</h3>
-        <input type="tel" id="input-mat" placeholder="Sua Matrícula">
-        <button onclick="fazerLogin()">Entrar</button>
+    <div id="step2" class="step">
+        <h3>Identificação</h3>
+        <input type="number" id="matricula" placeholder="Digite sua matrícula">
+        <button onclick="verificarLogin()">ENTRAR</button>
     </div>
 
-    <div id="step-menu" class="step">
-        <h3 id="saudacao"></h3>
-        <button onclick="alert('Funcionalidade de EPI')">Solicitar EPI</button>
-        <button onclick="alert('Funcionalidade de Desvio')">Relatar Desvio</button>
-        <button onclick="fazerLogout()" style="background:none; border:1px solid white;">Sair</button>
+    <div id="step3" class="step">
+        <h2 id="msgBoasVindas"></h2>
+        <button onclick="alert('Menu em construção')">SOLICITAR EPI</button>
+        <button onclick="fazerLogout()" style="background:none; border:1px solid white;">SAIR</button>
     </div>
 </div>
 
 <script>
-    const URL_API = 'https://script.google.com/macros/s/AKfycbytO_ANLIQSrhGDAJGQRUZD_-XjHHgp_yZZn8fyN-kvWj_SwT0QG_gcgqmdx9mqZx3OSw/exec';
-    let db = { funcionarios: {} };
+    const URL = "https://script.google.com/macros/s/AKfycbytO_ANLIQSrhGDAJGQRUZD_-XjHHgp_yZZn8fyN-kvWj_SwT0QG_gcgqmdx9mqZx3OSw/exec";
+    let baseDados = {};
 
-    // Função que verifica login logo ao carregar
-    function iniciarSistema() {
-        document.getElementById('loading').style.display = 'flex';
-        fetch(URL_API)
-            .then(res => res.json())
-            .then(data => {
-                db = data.dados;
-                document.getElementById('loading').style.display = 'none';
-                
-                const matSalva = localStorage.getItem('vic_mat');
-                if (matSalva && db.funcionarios[matSalva]) {
-                    logar(matSalva, db.funcionarios[matSalva]);
-                } else {
-                    trocarTela('step-login');
-                }
-            })
-            .catch(err => {
-                document.getElementById('loading').style.display = 'none';
-                alert("Erro ao conectar: " + err);
-            });
+    function showLoad(texto) {
+        const overlay = document.getElementById('loading-overlay');
+        const text = document.getElementById('loading-text');
+        if(text) text.innerText = texto;
+        if(overlay) overlay.style.display = 'flex';
     }
 
-    function fazerLogin() {
-        const mat = document.getElementById('input-mat').value;
-        if (db.funcionarios[mat]) {
+    function hideLoad() {
+        const overlay = document.getElementById('loading-overlay');
+        if(overlay) overlay.style.display = 'none';
+    }
+
+    function carregarSistema() {
+        showLoad("Sincronizando...");
+        fetch(URL)
+        .then(r => r.json())
+        .then(data => {
+            baseDados = data.dados.funcionarios;
+            hideLoad();
+            // Verifica se já tem login salvo
+            const matSalva = localStorage.getItem('vic_mat');
+            if (matSalva && baseDados[matSalva]) {
+                logar(matSalva, baseDados[matSalva]);
+            } else {
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+            }
+        })
+        .catch(err => {
+            hideLoad();
+            alert("Erro de conexão. Tente novamente.");
+        });
+    }
+
+    function verificarLogin() {
+        let mat = document.getElementById('matricula').value;
+        if (baseDados[mat]) {
             localStorage.setItem('vic_mat', mat);
-            logar(mat, db.funcionarios[mat]);
+            logar(mat, baseDados[mat]);
         } else {
-            alert("Matrícula não encontrada.");
+            alert("Matrícula não encontrada!");
         }
     }
 
     function logar(mat, nomeCompleto) {
-        const primeiroNome = nomeCompleto.split(' ')[0];
-        document.getElementById('saudacao').innerText = "Olá, " + primeiroNome;
-        trocarTela('step-menu');
+        let primeiroNome = nomeCompleto.split(' ')[0];
+        document.getElementById('msgBoasVindas').innerText = "Olá, " + primeiroNome;
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step3').classList.add('active');
     }
 
     function fazerLogout() {
         localStorage.removeItem('vic_mat');
         location.reload();
-    }
-
-    function trocarTela(id) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
     }
 </script>
 </body>
