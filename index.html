@@ -3,126 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Portal VIC</title>
+    <title>Portal VIC | VLI</title>
+    
+    <meta name="theme-color" content="#0085B2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <link rel="icon" type="image/png" sizes="192x192" href="logo-pwa.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="logo-pwa.png">
+    <link rel="manifest" href="./manifest.json">
+
     <style>
-        :root { --vli-azul: #0085B2; --vli-laranja: #F37021; }
-        
-        /* CSS para garantir que o site se adapte ao girar a tela */
-        * { box-sizing: border-box; }
+        :root { 
+            --vli-azul: #0085B2;
+            --vli-azul-escuro: #005f83;
+            --vli-laranja: #F37021;
+            --vli-verde: #24b34b; 
+            --vli-erro: #e13d4b; 
+            --radius-lg: 20px;
+            --radius-md: 14px; 
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            color: #FFFFFF; 
+        }
+
         body { 
+            background: var(--vli-azul-escuro); 
             margin: 0; 
-            padding: 20px; 
-            background: #005f83; 
-            font-family: sans-serif; 
-            color: white; 
             display: flex; 
             justify-content: center; 
-            align-items: center; 
-            min-height: 100vh;
+            min-height: 100vh; 
         }
+
         .container { 
             width: 100%; 
-            max-width: 400px; 
+            max-width: 450px; 
+            background: var(--vli-azul); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.3); 
+            z-index: 2; 
+            position: relative; 
+        }
+        
+        .pwa-banner {
+            display: none;
+            background: #ffffff;
+            padding: 16px;
+            margin: 20px 20px 0 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--vli-laranja);
+            animation: fadeIn 0.5s ease;
+        }
+        .pwa-banner p { color: #1E293B; margin: 0 0 12px 0; font-size: 13px; font-weight: 600; text-align: center; line-height: 1.5; }
+        .pwa-banner p span { color: #64748B; font-size: 12px; display: block; font-weight: 400; margin-top: 4px;}
+        .pwa-banner button { width: 100%; padding: 12px; border: none; background: var(--vli-laranja); color: white; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .header { 
+            padding: 60px 24px 20px; 
             text-align: center; 
         }
         
-        .step { display: none; }
-        .step.active { display: block; }
-        
-        button { width: 100%; padding: 18px; border-radius: 12px; border: none; background: var(--vli-laranja); color: white; font-size: 16px; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        input { width: 100%; padding: 18px; border-radius: 12px; border: none; font-size: 16px; margin-top: 10px; }
-        
-        /* Overlay de carregamento (O erro que você encontrou estava aqui) */
-        #loading-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.7); color: white; justify-content: center; align-items: center; flex-direction: column; z-index: 999;
+        .logo-box { 
+            background: white; 
+            padding: 14px 22px; 
+            border-radius: var(--radius-md); 
+            display: inline-block; 
+            margin-bottom: 24px; 
+            box-shadow: var(--shadow-sm); 
         }
+        
+        .logo { width: 90px; display: block; }
+        
+        .header-title { 
+            font-weight: 800; 
+            letter-spacing: 1.5px; 
+            font-size: 20px; 
+            text-transform: uppercase; 
+            opacity: 0.95;
+        }
+        
+        .user-pill { 
+            background: rgba(255, 255, 255, 0.1); 
+            margin: 15px 28px 0; 
+            padding: 14px 20px; 
+            border-radius: var(--radius-md); 
+            font-size: 14px; 
+            text-align: center; 
+            display: none; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(4px);
+        }
+        
+        .content { 
+            padding: 32px 28px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        .step { 
+            display: none; 
+            width: 100%; 
+        }
+        .step.active { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        #step-start.active { margin-top: 35px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        h3 { font-weight: 700; font-size: 22px; margin: 0 0 10px 0; text-align: center; }
+        
+        label { display: block; font-weight: 700; margin: 8px 0 -8px 2px; font-size: 11px; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 0.8px; }
+        
+        input, select, textarea { 
+            width: 100%; 
+            padding: 16px; 
+            border: none; 
+            border-radius: var(--radius-md); 
+            font-size: 15px; 
+            background: #fff; 
+            color: #1E293B; 
+            outline: none; 
+            transition: all 0.25s ease; 
+        }
+        input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
+        
+        .btn { width: 100%; padding: 18px; border: none; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
+        .btn:active { transform: scale(0.98); opacity: 0.95; }
+        
+        .btn-orange { background: var(--vli-laranja); color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-top: 10px; }
+        
+        .btn-back { background: transparent; color: white; font-size: 12px; border: 1.5px solid rgba(255,255,255,0.3); margin-top: 15px; }
+        .btn-back:hover { background: rgba(255,255,255,0.1); }
+        
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .menu-card { background: #fff; border: none; padding: 26px 16px; border-radius: var(--radius-md); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; transition: all 0.25s ease; box-shadow: var(--shadow-sm); }
+        .menu-card:active { transform: translateY(-2px); background: #f8fafc; }
+        .menu-card span { font-size: 32px; }
+        .menu-card b { font-weight: 700; font-size: 14px; color: #1E293B; }
+        
+        .cart-item { background: #fff; padding: 16px; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--vli-laranja); box-shadow: var(--shadow-sm); }
+        .info-box { background: #fff; padding: 20px; border-radius: var(--radius-md); color: #1E293B; font-size: 14px; line-height: 1.6; }
+        
+        .watermark { text-align: center; padding: 20px 0 25px; font-size: 10px; font-weight: 600; color: rgba(255, 255, 255, 0.35); text-transform: uppercase; letter-spacing: 1px; pointer-events: none; margin-top: auto; }
+
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,133,178,0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .spinner { border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid #fff; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.7s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div id="loading-overlay">
-    <div id="loading-text">Carregando...</div>
+<div class="container">
+    <div id="install-banner" class="pwa-banner">
+        <p id="install-text">Instale o Portal VIC no seu celular <span>Acesse rápido e economize dados do seu plano</span></p>
+        <button id="install-button" onclick="triggerPwaInstall()">Baixar Aplicativo</button>
+    </div>
+
+    <div class="header">
+        <div class="logo-box">
+            <img src="logo-pwa.png" class="logo" alt="Portal VIC">
+        </div>
+        <div class="header-title">Portal VIC</div>
+    </div>
+    
+    <div id="user-pill" class="user-pill"></div>
+
+    <div class="content">
+        <div id="step-start" class="step active" style="text-align:center;">
+            <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 0 0 10px 0; font-weight: 500; line-height: 1.5;">Bem-vindo ao Portal VLI - VIC.</p>
+            <button class="btn btn-orange" onclick="initSystem()">Acessar Portal</button>
+        </div>
+        
+        <div id="step-login" class="step">
+            <h3>Identificação</h3>
+            <p style="text-align: center; color: rgba(255,255,255,0.8); font-size: 14px; margin: -10px 0 10px 0;">Insira sua matrícula para continuar.</p>
+            <label>Matrícula</label>
+            <input type="tel" id="input-mat" placeholder="Ex: 12345" maxlength="8">
+            <button class="btn btn-orange" onclick="handleLogin()">Entrar no Sistema</button>
+        </div>
+
+        <div id="step-menu" class="step">
+            <div class="menu-grid">
+                <div class="menu-card" onclick="goTo('step-epi')"><span>📦</span><b>Solicitar EPI</b></div>
+                <div class="menu-card" onclick="goTo('step-desvio')"><span>⚠️</span><b>Relatar Desvio</b></div>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card" onclick="checkFerias()" style="grid-column: span 2; flex-direction: row; justify-content: center; padding: 22px; gap: 16px;">
+                    <span>📅</span><b>Minhas Férias 2027</b>
+                </div>
+            </div>
+            <button class="btn btn-back" onclick="fazerLogout()" style="border:none; text-decoration: underline; font-weight:700; margin-top: 10px;">Sair da Conta</button>
+        </div>
+
+        <div id="step-epi" class="step">
+            <h3>Solicitação de EPI</h3>
+            <label>Selecione o Item</label>
+            <select id="select-epi" onchange="updateEpiFields()"></select>
+            <div id="epi-dinamico" style="display: flex; flex-direction: column; gap: 20px;"></div>
+            <button class="btn btn-orange" style="background: white; color: var(--vli-laranja);" onclick="addItem()">+ Adicionar à Lista</button>
+            
+            <div id="cart-area" style="display:none; margin-top:15px; border-top:1.5px solid rgba(255,255,255,0.2); padding-top:20px; display: flex; flex-direction: column; gap: 16px;">
+                <label>Itens Selecionados:</label>
+                <div id="cart-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                <button class="btn btn-orange" onclick="sendEPI()">Finalizar Pedido</button>
+            </div>
+            <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
+        </div>
+
+        <div id="step-desvio" class="step">
+            <h3>Relatar Desvio</h3>
+            <div id="desvio-form" style="display: flex; flex-direction: column; gap: 20px;">
+                <label>Local da Ocorrência</label>
+                <select id="d-local">
+                    <option>Pátio de Cima</option>
+                    <option>Pátio de Baixo</option>
+                    <option>Terminal do Carvão</option>
+                    <option>Oficina</option>
+                    <option>Estação</option>
+                </select>
+                
+                <label>Quando ocorreu?</label>
+                <select id="d-tempo-tipo" onchange="document.getElementById('div-manual').style.display=(this.value==='manual'?'flex':'none')">
+                    <option value="agora">Agora</option>
+                    <option value="manual">Selecionar Horário</option>
+                </select>
+                <div id="div-manual" style="display:none; gap:12px;">
+                    <input type="date" id="d-data-manual">
+                    <input type="time" id="d-hora-manual">
+                </div>
+                
+                <label>Descrição do Evento</label>
+                <textarea id="d-desc" rows="4" placeholder="Descreva os detalhes do que aconteceu..."></textarea>
+                
+                <button class="btn btn-orange" onclick="sendDesvio()">Registrar Desvio</button>
+                <button class="btn btn-back" onclick="verMeusDesvios()">🔍 Ver Meu Histórico</button>
+            </div>
+            
+            <div id="desvio-lista" style="display:none; border-top: 1.5px solid rgba(255,255,255,0.2); padding-top: 15px; display: flex; flex-direction: column; gap: 16px;">
+                <p style="font-size:11px; color:rgba(255,255,255,0.8); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">Seu Histórico:</p>
+                <div id="container-historico-desvios" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                <button class="btn btn-back" onclick="document.getElementById('desvio-lista').style.display='none'; document.getElementById('desvio-form').style.display='block';">Voltar ao Formulário</button>
+            </div>
+            <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
+        </div>
+
+        <div id="step-ferias" class="step">
+            <h3>Minhas Férias 2027</h3>
+            <div id="ferias-view-agendada" style="display:none;">
+                <div class="info-box">
+                    <b style="color: var(--vli-azul); font-size: 15px;">Sugestão já registrada!</b><br><br>
+                    <div id="detalhe-ferias" style="color: #1E293B;"></div>
+                    <p style="margin-top:15px; font-size: 12px; font-weight:700; color:var(--vli-erro)">* Para alterações, contate a supervisão.</p>
+                </div>
+            </div>
+            <div id="ferias-form-sugestao" style="display: flex; flex-direction: column; gap: 20px;">
+                <label>Quantidade de Dias</label>
+                <select id="f-dias">
+                    <option value="30">30 Dias</option>
+                    <option value="20">20 Dias</option>
+                </select>
+                <label>1ª Opção (Mês/Ano)</label><input type="month" id="f-op1">
+                <label>2ª Opção (Mês/Ano)</label><input type="month" id="f-op2">
+                <label>3ª Opção (Mês/Ano)</label><input type="month" id="f-op3">
+                <button class="btn btn-orange" onclick="sendFerias()">Enviar Sugestão</button>
+            </div>
+            <button class="btn btn-back" onclick="goToMenu()">Voltar ao Menu</button>
+        </div>
+
+        <div id="step-sucesso" class="step" style="text-align:center; padding-top: 20px;">
+            <div style="font-size:60px;">✅</div>
+            <h2 style="color: #fff; margin-top: 16px; font-weight: 800;">Registro Concluído!</h2>
+            <p style="color:rgba(255,255,255,0.8); font-size: 15px; max-width: 85%; margin: 10px auto 0; line-height: 1.5;">Seus dados foram processados com sucesso no sistema.</p>
+            <button class="btn btn-orange" style="margin-top: 20px;" onclick="goToMenu()">Retornar ao Menu</button>
+        </div>
+        
+        <div class="watermark">Desenvolvido por M.Custodio</div>
+    </div>
 </div>
 
-<div class="container">
-    <div id="step1" class="step active">
-        <h2>Portal VIC</h2>
-        <button onclick="carregarSistema()">ACESSAR PORTAL</button>
-    </div>
-
-    <div id="step2" class="step">
-        <h3>Identificação</h3>
-        <input type="number" id="matricula" placeholder="Digite sua matrícula">
-        <button onclick="verificarLogin()">ENTRAR</button>
-    </div>
-
-    <div id="step3" class="step">
-        <h2 id="msgBoasVindas"></h2>
-        <button onclick="alert('Menu em construção')">SOLICITAR EPI</button>
-        <button onclick="fazerLogout()" style="background:none; border:1px solid white;">SAIR</button>
-    </div>
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <div id="loading-text" style="color: #ffffff; margin-top: 16px; font-weight: 600; font-size: 14px;">Carregando...</div>
 </div>
 
 <script>
-    const URL = "https://script.google.com/macros/s/AKfycbytO_ANLIQSrhGDAJGQRUZD_-XjHHgp_yZZn8fyN-kvWj_SwT0QG_gcgqmdx9mqZx3OSw/exec";
-    let baseDados = {};
+    const URL_API = 'https://script.google.com/macros/s/AKfycbytO_ANLIQSrhGDAJGQRUZD_-XjHHgp_yZZn8fyN-kvWj_SwT0QG_gcgqmdx9mqZx3OSw/exec'; 
+    let db = { funcionarios: {}, epis: [], ferias: {}, desvios: [] };
+    let user = { mat: "", nome: "" };
+    let cart = [];
+    let deferredPrompt;
 
-    function showLoad(texto) {
-        const overlay = document.getElementById('loading-overlay');
-        const text = document.getElementById('loading-text');
-        if(text) text.innerText = texto;
-        if(overlay) overlay.style.display = 'flex';
-    }
-
-    function hideLoad() {
-        const overlay = document.getElementById('loading-overlay');
-        if(overlay) overlay.style.display = 'none';
-    }
-
-    function carregarSistema() {
-        showLoad("Sincronizando...");
-        fetch(URL)
-        .then(r => r.json())
-        .then(data => {
-            baseDados = data.dados.funcionarios;
-            hideLoad();
-            // Verifica se já tem login salvo
-            const matSalva = localStorage.getItem('vic_mat');
-            if (matSalva && baseDados[matSalva]) {
-                logar(matSalva, baseDados[matSalva]);
+    window.addEventListener('DOMContentLoaded', () => {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        const banner = document.getElementById('install-banner');
+        
+        if (!isStandalone) {
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIos) {
+                document.getElementById('install-text').innerHTML = 'Adicione o Portal VIC à tela inicial <span>Toque no botão de Compartilhar <b style="font-size:15px; color:var(--vli-laranja);">⎋</b> do Safari e escolha "Adicionar à Tela de Início"</span>';
+                document.getElementById('install-button').style.display = 'none';
+                banner.style.display = 'block';
             } else {
-                document.getElementById('step1').classList.remove('active');
-                document.getElementById('step2').classList.add('active');
-            }
-        })
-        .catch(err => {
-            hideLoad();
-            alert("Erro de conexão. Tente novamente.");
-        });
-    }
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    banner.style.display = 'block';
+                });
 
-    function verificarLogin() {
-        let mat = document.getElementById('matricula').value;
-        if (baseDados[mat]) {
-            localStorage.setItem('vic_mat', mat);
-            logar(mat, baseDados[mat]);
-        } else {
-            alert("Matrícula não encontrada!");
+                setTimeout(() => {
+                    if (!deferredPrompt && banner.style.display !== 'block') {
+                        document.getElementById('install-text').innerHTML = 'Instale o Portal VIC no seu Android <span>Toque nos 3 pontinhos <b style="font-size:16px; color:var(--vli-laranja);">⋮</b> do navegador e selecione "Instalar aplicativo" ou "Adicionar à tela inicial"</span>';
+                        document.getElementById('install-button').style.display = 'none';
+                        banner.style.display = 'block';
+                    }
+                }, 2000);
+            }
+        }
+    });
+
+    function triggerPwaInstall() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação.');
+                }
+                document.getElementById('install-banner').style.display = 'none';
+                deferredPrompt = null;
+            });
         }
     }
 
-    function logar(mat, nomeCompleto) {
-        let primeiroNome = nomeCompleto.split(' ')[0];
-        document.getElementById('msgBoasVindas').innerText = "Olá, " + primeiroNome;
-        document.getElementById('step1').classList.remove('active');
-        document.getElementById('step2').classList.remove('active');
-        document.getElementById('step3').classList.add('active');
+    async function initSystem() {
+        showLoad("Sincronizando Dados...");
+        try {
+            const r = await fetch(URL_API);
+            const json = await r.json();
+            db = json.dados;
+            if (!db.desvios) db.desvios = []; 
+            const sel = document.getElementById('select-epi');
+            sel.innerHTML = '<option value="">Selecione o EPI...</option>';
+            db.epis.forEach(e => sel.innerHTML += `<option value="${e.nome}">${e.nome}</option>`);
+            
+            // Verifica se o usuário já tem um login salvo no localStorage
+            const savedMat = localStorage.getItem('vic_user_mat');
+            const savedNome = localStorage.getItem('vic_user_nome');
+            
+            if (savedMat && savedNome) {
+                user = { mat: savedMat, nome: savedNome };
+                exibirSaudacao();
+                hideLoad();
+                goTo('step-menu');
+            } else {
+                hideLoad(); 
+                goTo('step-login');
+            }
+        } catch (e) { alert("Erro de conexão com o servidor corporativo."); hideLoad(); }
+    }
+    
+    // Função separada para lidar com a saudação de forma limpa
+    function exibirSaudacao() {
+        const hr = new Date().getHours();
+        let saudacao = "Boa noite";
+        if (hr >= 5 && hr < 12) saudacao = "Bom dia";
+        else if (hr >= 12 && hr < 18) saudacao = "Boa tarde";
+        
+        // Separa o nome completo pelos espaços e pega apenas a primeira parte
+        const primeiroNome = user.nome.split(' ')[0];
+        
+        document.getElementById('user-pill').innerHTML = `👤 ${saudacao}, <b>${primeiroNome}</b>`;
+        document.getElementById('user-pill').style.display = "block";
     }
 
+    function handleLogin() {
+        const m = document.getElementById('input-mat').value.trim();
+        const func = db.funcionarios[m] || db.funcionarios[parseInt(m)];
+        if (func) {
+            user = { mat: m, nome: func };
+            
+            // Salva as credenciais no armazenamento do navegador
+            localStorage.setItem('vic_user_mat', user.mat);
+            localStorage.setItem('vic_user_nome', user.nome);
+            
+            exibirSaudacao();
+            goTo('step-menu');
+        } else { alert("Matrícula não localizada na base de dados."); }
+    }
+    
+    // Função para limpar o acesso do usuário
     function fazerLogout() {
-        localStorage.removeItem('vic_mat');
+        localStorage.removeItem('vic_user_mat');
+        localStorage.removeItem('vic_user_nome');
         location.reload();
+    }
+
+    function updateEpiFields() {
+        const item = db.epis.find(i => i.nome === document.getElementById('select-epi').value);
+        const area = document.getElementById('epi-dinamico');
+        area.innerHTML = "";
+        if (item && item.label) {
+            let html = `<div><label>${item.label}</label><select id="o1" style="margin-top:16px;">`;
+            String(item.opcoes).split(';').forEach(o => { if(o.trim()) html += `<option value="${o.trim()}">${o.trim()}</option>`; });
+            html += `</select></div>`;
+            if(item.label2 && item.opcoes2) {
+                html += `<div><label>${item.label2}</label><select id="o2" style="margin-top:16px;">`;
+                String(item.opcoes2).split(';').forEach(o => { if(o.trim()) html += `<option value="${o.trim()}">${o.trim()}</option>`; });
+                html += `</select></div>`;
+            }
+            area.innerHTML = html;
+        }
+    }
+
+    function addItem() {
+        const sel = document.getElementById('select-epi');
+        if(!sel.value) return;
+        const val1 = document.getElementById('o1') ? document.getElementById('o1').value : "";
+        const val2 = document.getElementById('o2') ? document.getElementById('o2').value : "";
+        const detStr = `${val1} ${val2}`.trim();
+        cart.push({ n: sel.value, det: detStr, o1: val1, o2: val2 });
+        sel.value = ""; 
+        document.getElementById('epi-dinamico').innerHTML = "";
+        renderCart();
+    }
+
+    function renderCart() {
+        const area = document.getElementById('cart-area');
+        if(cart.length) {
+            area.style.setProperty('display', 'flex', 'important');
+        } else {
+            area.style.display = 'none';
+        }
+        document.getElementById('cart-list').innerHTML = cart.map((it, i) => `
+            <div class="cart-item">
+                <div><b style="color:var(--vli-azul); font-size:15px;">${it.n}</b><br><small style="color:#64748B;">${it.det}</small></div>
+                <button onclick="cart.splice(${i},1);renderCart()" style="border:none;background:none;color:var(--vli-erro);font-size:18px;cursor:pointer;padding:4px;">✕</button>
+            </div>`).join('');
+    }
+
+    async function sendEPI() {
+        showLoad("Processando Pedido...");
+        try {
+            for (const it of cart) {
+                await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
+                    tipo: "EPI", funcionario: user.nome, matricula: user.mat, epi: it.n, detalhes: it.det, opcao: it.o1, opcao2: it.o2, protocolo: "EPI"+Date.now()
+                }) });
+            }
+            cart = []; 
+            hideLoad(); goTo('step-sucesso');
+        } catch (e) { hideLoad(); alert("Erro ao enviar solicitação."); }
+    }
+
+    async function sendDesvio() {
+        const desc = document.getElementById('d-desc').value.trim();
+        if(!desc) return alert("Por favor, descreva o desvio.");
+        showLoad("Registrando...");
+        let dF = new Date().toLocaleDateString('pt-BR');
+        let hF = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+        if(document.getElementById('d-tempo-tipo').value === 'manual') {
+            dF = document.getElementById('d-data-manual').value.split('-').reverse().join('/');
+            hF = document.getElementById('d-hora-manual').value;
+        }
+        try {
+            await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
+                tipo: "DESVIO", nome: user.nome, matricula: user.mat, local: document.getElementById('d-local').value, descricao: desc, dataFato: dF, horaFato: hF
+            }) });
+            document.getElementById('d-desc').value = ""; 
+            hideLoad(); goTo('step-sucesso');
+        } catch(e) { hideLoad(); alert("Erro ao registrar desvio."); }
+    }
+
+    function verMeusDesvios() {
+        document.getElementById('desvio-form').style.display = 'none';
+        document.getElementById('desvio-lista').style.setProperty('display', 'flex', 'important');
+        const container = document.getElementById('container-historico-desvios');
+        container.innerHTML = "";
+        const meusDesvios = (db.desvios || []).filter(d => String(d.matricula) === String(user.mat));
+        if (meusDesvios.length > 0) {
+            [...meusDesvios].reverse().forEach(d => {
+                container.innerHTML += `<div style="background:#fff; padding:16px; border-radius:var(--radius-md); font-size:13px; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; gap:6px;">
+                    <b style="color:#1E293B;">📅 ${d.dataFato} às ${d.horaFato} - ${d.local}</b>
+                    <span style="color:#64748B; line-height:1.4;">${d.descricao}</span>
+                </div>`;
+            });
+        } else { container.innerHTML = "<p style='font-size:13px; color:rgba(255,255,255,0.8); text-align:center; padding: 20px 0;'>Nenhum registro encontrado no seu histórico.</p>"; }
+    }
+
+    function checkFerias() {
+        const reg = db.ferias[user.mat];
+        if (reg) {
+            document.getElementById('ferias-view-agendada').style.display = 'block';
+            document.getElementById('ferias-form-sugestao').style.display = 'none';
+            const formatar = (v) => { if (!v) return ""; const p = v.split('T')[0].split('-'); return p.length >= 2 ? p[1] + "/" + p[0] : v; };
+            let h = `<b>Período Solicitado:</b> ${reg.dias} dias<br><br><b>1ª Opção:</b> ${formatar(reg.op1)}`;
+            if (reg.op2) h += `<br><b>2ª Opção:</b> ${formatar(reg.op2)}`;
+            if (reg.op3) h += `<br><b>3ª Opção:</b> ${formatar(reg.op3)}`;
+            document.getElementById('detalhe-ferias').innerHTML = h;
+        } else {
+            document.getElementById('ferias-view-agendada').style.display = 'none';
+            document.getElementById('ferias-form-sugestao').style.setProperty('display', 'flex', 'important');
+        }
+        goTo('step-ferias');
+    }
+
+    async function sendFerias() {
+        const op1 = document.getElementById('f-op1').value;
+        if(!op1) return alert("Selecione obrigatoriamente a 1ª opção de data.");
+        showLoad("Enviando...");
+        try {
+            await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({
+                tipo: "FERIAS", nome: user.nome, matricula: user.mat, dias: document.getElementById('f-dias').value, op1: op1, op2: document.getElementById('f-op2').value, op3: document.getElementById('f-op3').value
+            }) });
+            hideLoad(); goTo('step-sucesso');
+        } catch(e) { hideLoad(); alert("Erro ao enviar solicitação."); }
+    }
+
+    function showLoad(t) { document.getElementById('loading-text').innerText = t; document.getElementById('loading-overlay').style.display = 'flex'; }
+    function hideLoad() { document.getElementById('loading-overlay').style.display = 'none'; }
+    
+    function goTo(id) { 
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
+        window.scrollTo(0,0); 
+    }
+    function goToMenu() { goTo('step-menu'); }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('PWA pronto.', reg))
+                .catch(err => console.error('Erro PWA:', err));
+        });
     }
 </script>
 </body>
